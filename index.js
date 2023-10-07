@@ -6,8 +6,6 @@ const path = require('path');
 const dotenv = require('dotenv');
 dotenv.config();
 
-app.use(express.static("frontend"));
-
 // --- SERVER ---
 // Corre el servidor por el puerto especificado en la variable de entorno
 const app = express();
