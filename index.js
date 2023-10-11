@@ -4,11 +4,13 @@ const session = require('express-session');
 const mysql = require('mysql2');
 const path = require('path');
 const dotenv = require('dotenv');
+const cors = require('cors');
 dotenv.config();
 
 // --- SERVER ---
 // Corre el servidor por el puerto especificado en la variable de entorno
 const app = express();
+app.use(cors());
 const port = process.env.PORT || 4040;
 app.listen(port, () => {
 	console.log('****************************');
