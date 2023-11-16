@@ -1,19 +1,29 @@
 const db = require('../database/databaseconfig')
 const session = require('express-session');
-// const bcrypt = require('bcrypt');
-// const saltRounds = 10;
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 async function Registro(req, res){
     try {
         const {username, password} = req.body;
 
+		// Generar salt (valor aleatorio) para bcrypt
+		bcrypt.genSalt(saltRounds, (err, salt) => {
+			if (err) {
+			  return res.status(500).send('Error al generar el salt para la contraseña');
+			}
+		
+			// Hash de la contraseña con el salt generado
+			bcrypt.hash(password, salt, (err, hash) => {
+			  if (err) {
+				return res.status(500).send('Error al generar el hash para la contraseña');
+			  }
+
 	if (username && password) {
-		db.query('INSERT INTO users(username, password) VALUES(?, ?)', [username, password], (error, results) => {
+		db.query('INSERT INTO users(username, password) VALUES(?, ?)', [username, hash], (error, results) => {
 			if (error) throw error;
 
 			if (results) {
-				session.loggedin = true;
-				session.username = username;
 				res.send(true);
 				console.log('Usuario creado exitosamente.');
 			}
@@ -28,6 +38,8 @@ async function Registro(req, res){
 		res.send('Por favor ingrese el usuario y la clave para el nuevo usuario.');
 		res.end();
 	}
+	})
+})
         
     } catch (error) {
         
