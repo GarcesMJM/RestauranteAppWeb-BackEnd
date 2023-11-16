@@ -17,7 +17,7 @@ app.use('/', routes);
 // Ruta de ejemplo
 app.get('/', (req, res) => {
 	res.send('¡Hola, mundo!');
-  });
+});
 
 // --- SERVER ---
 // Corre el servidor por el puerto especificado en la variable de entorno
