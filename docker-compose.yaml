@@ -15,7 +15,11 @@ services:
   application:
     image: backend
     container_name: app-node
-    command: npx nodemon /app/index.js --legacy-watch
+    command: 
+      - "npx"
+      - "nodemon"
+      - "/app/index.js"
+      - "--legacy-watch"
     ports:
       - 80:80
     environment:
