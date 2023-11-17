@@ -1,5 +1,4 @@
 const db = require('../database/databaseconfig')
-const session = require('express-session');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -18,9 +17,8 @@ async function Registro(req, res){
 			  if (err) {
 				return res.status(500).send('Error al generar el hash para la contraseña');
 			  }
-
 	if (username && password) {
-		db.query('INSERT INTO users(username, password) VALUES(?, ?)', [username, hash], (error, results) => {
+		db.query('INSERT INTO users(username, hash) VALUES(?, ?)', [username, hash], (error, results) => {
 			if (error) throw error;
 
 			if (results) {
