@@ -8,10 +8,11 @@ async function Book(req, res) {
 
             const cuposQuery = 'SELECT cupos_disp FROM sedes WHERE name = ?';
             const insertQuery = 'INSERT INTO bookings(username, name, email, num, sede, date, time) VALUES(?, ?, ?, ?, ?, ?, ?)';
+            const updateCuposQuery = 'UPDATE sedes SET cupos_disp = cupos_disp - ? WHERE name = ?';
 
             db.query(cuposQuery, [sede], async (error, results) => {
                 if (error) {
-                    console.log('Error consultando los cupos:', error);
+                    console.log('Error consultando los cupos: ', error);
                     res.send('Error interno al procesar la reserva.');
                     return res.end();
                 }
@@ -26,16 +27,24 @@ async function Book(req, res) {
 
                 db.query(insertQuery, [username, name, email, num, sede, date, time], (error, results) => {
                     if (results) {
-                        res.send('¡Tu reservación ha sido creada!');
                         console.log('Reservación creada en la BD.');
-                    }
-                    else {
+                        db.query(updateCuposQuery, [num, sede], (updateError, updateResults) => {
+                            if (updateError) {
+                                console.error('Error actualizando los cupos: ', updateError);
+                                res.send('Error interno al procesar la reserva.');
+                                return res.end();
+                            }
+                            console.log('Cupos actualizados correctamente.');
+                            res.send('¡Tu reservación ha sido creada!');
+                            return res.end();
+                        });
+                    } else {
                         res.send('No se pudo crear la reservación');
                         console.log('!***************!');
                         console.log('Error creando la reservación en la BD:');
                         console.log(error);
+                        return res.end();
                     }
-                    res.end();
                 });
             });
         } else {
