@@ -4,7 +4,7 @@ const saltRounds = 10;
 
 async function Registro(req, res){
     try {
-        const {username, password} = req.body;
+        const {username, email, password} = req.body;
 
 		// Generar salt (valor aleatorio) para bcrypt
 		bcrypt.genSalt(saltRounds, (err, salt) => {
@@ -18,7 +18,7 @@ async function Registro(req, res){
 				return res.status(500).send('Error al generar el hash para la contraseña');
 			  }
 	if (username && password) {
-		db.query('INSERT INTO users(username, hash) VALUES(?, ?)', [username, hash], (error, results) => {
+		db.query('INSERT INTO users(username, email, hash) VALUES(?, ?, ?)', [username, email, hash], (error, results) => {
 			if (error) throw error;
 
 			if (results) {
