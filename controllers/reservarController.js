@@ -2,10 +2,10 @@ const db = require('../database/databaseconfig')
 
 async function Book(req, res) {
     try {
-        const { name, email, num, sede, date, time } = req.body;
+        const { username, name, email, num, sede, date, time } = req.body;
 
         if (name && email && num && sede && date && time) {
-            db.query("INSERT INTO bookings(name, email, num, sede, date, time) VALUES(?, ?, ?, ?, ?, ?)", [name, email, num, sede, date, time], (error, results) => {
+            db.query("INSERT INTO bookings(username, name, email, num, sede, date, time) VALUES(?, ?, ?, ?, ?, ?, ?)", [username, name, email, num, sede, date, time], (error, results) => {
                 if (results) {
                     res.send('¡Tu reservación ha sido creada!');
                     console.log('Reservación creada en la BD.');

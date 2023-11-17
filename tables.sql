@@ -7,21 +7,22 @@ CREATE TABLE users (
 );
 
 CREATE TABLE bookings (
-  id INT PRIMARY KEY AUTO_INCREMENT, 
-  name VARCHAR(60) FOREIGN kEY REFERENCES users(username),
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  username VARCHAR(15),
+  name VARCHAR(60),
   email VARCHAR(30),
   num INT,
-  sede VARCHAR(15) FOREIGN KEY REFERENCES sedes(name),
+  sede VARCHAR(15),
   date DATE,
-  time TIME
+  time TIME,
+  FOREIGN KEY (username) REFERENCES users(username),
+  FOREIGN KEY (sede) REFERENCES sedes(name)
 );
 
 CREATE TABLE sedes ( 
   name VARCHAR(15) PRIMARY KEY,
   cupos_totales INT,
-  cupos_disp INT,
-  date DATE,
-  time TIME
+  cupos_disp INT
 );
 
 CREATE TABLE tipos_comidas(
@@ -36,3 +37,7 @@ CREATE TABLE productos (
   imagen VARCHAR(50),
   FOREIGN KEY (tipo) REFERENCES tipos_comidas(tipo)
 );
+
+INSERT INTO sedes(name, cupos_totales, cupos_disp) VALUES('Laureles', 10, 10);
+INSERT INTO sedes(name, cupos_totales, cupos_disp) VALUES('Poablado', 15, 15);
+INSERT INTO sedes(name, cupos_totales, cupos_disp) VALUES('Sabaneta', 15, 15);
