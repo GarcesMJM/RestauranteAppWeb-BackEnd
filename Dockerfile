@@ -8,7 +8,4 @@ RUN mkdir /app
 COPY package.json /app
 COPY package-lock.json /app
 RUN npm install
-RUN npm install bcrypt
-RUN npm install jsonwebtoken
-RUN npm install ngx-toastr
 

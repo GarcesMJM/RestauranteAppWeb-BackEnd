@@ -19,9 +19,9 @@ app.get('/', (req, res) => {
 	res.send('¡Hola, mundo!');
 });
 
-  app.get('/inicio', (req, res) => {
+app.get('/inicio', (req, res) => {
 	res.sendFile(path.join(__dirname, './views/register.html'));
-  });
+});
 
 // --- SERVER ---
 // Corre el servidor por el puerto especificado en la variable de entorno
