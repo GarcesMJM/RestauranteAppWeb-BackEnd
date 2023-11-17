@@ -1,22 +1,32 @@
+const db = require('../database/databaseconfig')
+const jwt = require('jsonwebtoken');
+
 async function obtenerUsuario(req , res){
     try {
         const {token} = req.body;
-
+              
         if (!token) {
-            return res.status(200).json({ message: 'No hay token' });
+            return res.send({ message: 'No hay token' });
           }
-        
-          jwt.verify(token, 'your-secret-key', (err, decoded) => {
+          jwt.verify(token, 'clave_secreta', (err, decoded) => {
             if (err) {
-              return res.status(200).json({ message: 'Invalid token' });
+              return res.send({ message: 'Invalid token' });
             }
-    
-            usuario = decoded;
-            db.query('SELECT * FROM users WHERE id = ?', [usuario.id], async (error, results) => {
+            
+            id = decoded.userId;
+            db.query('SELECT * FROM users WHERE id = ?', [id], async (error, results) => {
 
+                if (error) throw error;
+
+                if (results.length > 0) {
+                let usuario = {
+                  id: results[0].id,
+                  username: results[0].username,
+                  hashedPassword: results[0].hash, 
+                };
+                res.send(usuario);
+            }
             });
-        
-            next();
           });
         
     } catch (error) {
@@ -24,3 +34,5 @@ async function obtenerUsuario(req , res){
     }
 
 }
+
+module.exports=obtenerUsuario;

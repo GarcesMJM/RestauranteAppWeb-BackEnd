@@ -31,8 +31,7 @@ try{
 
 				session.loggedin = true;
 				session.username = username;
-				console.log(token)
-				res.json({ token });
+				res.send(token);
 			}
 			else {
 				res.send(null);
