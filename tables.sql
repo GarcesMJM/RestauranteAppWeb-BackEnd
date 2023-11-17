@@ -39,5 +39,5 @@ CREATE TABLE productos (
 );
 
 INSERT INTO sedes(name, cupos_totales, cupos_disp) VALUES('Laureles', 10, 10);
-INSERT INTO sedes(name, cupos_totales, cupos_disp) VALUES('Poablado', 15, 15);
+INSERT INTO sedes(name, cupos_totales, cupos_disp) VALUES('Poblado', 15, 15);
 INSERT INTO sedes(name, cupos_totales, cupos_disp) VALUES('Sabaneta', 15, 15);

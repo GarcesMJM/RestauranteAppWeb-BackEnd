@@ -4,32 +4,50 @@ async function Book(req, res) {
     try {
         const { username, name, email, num, sede, date, time } = req.body;
 
-        if (name && email && num && sede && date && time) {
-            db.query("INSERT INTO bookings(username, name, email, num, sede, date, time) VALUES(?, ?, ?, ?, ?, ?, ?)", [username, name, email, num, sede, date, time], (error, results) => {
-                if (results) {
-                    res.send('¡Tu reservación ha sido creada!');
-                    console.log('Reservación creada en la BD.');
+        if (username && name && email && num && sede && date && time) {
+
+            const cuposQuery = 'SELECT cupos_disp FROM sedes WHERE name = ?';
+            const insertQuery = 'INSERT INTO bookings(username, name, email, num, sede, date, time) VALUES(?, ?, ?, ?, ?, ?, ?)';
+
+            db.query(cuposQuery, [sede], async (error, results) => {
+                if (error) {
+                    console.log('Error consultando los cupos:', error);
+                    res.send('Error interno al procesar la reserva.');
+                    return res.end();
                 }
-                else {
-                    res.send('No se pudo crear la reservación');
-                    console.log('!***************!');
-                    console.log('Error creando la reservación en la BD:');
-                    console.log(error);
+
+                if (results.length > 0) {
+                    const cupos = results[0].cupos_disp;
+                    if (cupos < num) {
+                        res.send('No hay cupos suficientes.');
+                        return res.end();
+                    }
                 }
-                res.end();
+
+                db.query(insertQuery, [username, name, email, num, sede, date, time], (error, results) => {
+                    if (results) {
+                        res.send('¡Tu reservación ha sido creada!');
+                        console.log('Reservación creada en la BD.');
+                    }
+                    else {
+                        res.send('No se pudo crear la reservación');
+                        console.log('!***************!');
+                        console.log('Error creando la reservación en la BD:');
+                        console.log(error);
+                    }
+                    res.end();
+                });
             });
-        }
-        else {
-            console.log('Datos vacíos.')
+        } else {
+            console.log('Datos vacíos.');
             res.send('Algunos datos obligatorios se encuentran vacíos.');
             res.end();
         }
-
-    }
-    catch (e) {
-        console.log(e);
+    } catch (e) {
+        console.log('Error en la función Book:', e);
+        res.send('Error interno al procesar la reserva.');
+        res.end();
     }
 }
-
 
 module.exports = Book;
