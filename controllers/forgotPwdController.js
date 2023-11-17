@@ -14,8 +14,7 @@ const transporter = nodemailer.createTransport({
 async function olvidoContraseña(req, res){
     try {
         const { email } = req.body;
-        
-
+    
         // Verifica que el correo exista en tu base de datos
         if (email) {
             db.query('SELECT * FROM users WHERE email = ?', [email], async (error, results) => {
