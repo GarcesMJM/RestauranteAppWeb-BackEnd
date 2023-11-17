@@ -16,7 +16,6 @@ try{
 
 			if (results.length > 0) {
 				 usuario = {
-				  id: results[0].id,
 				  username: results[0].username,
 				  hashedPassword: results[0].hash, 
 				};
@@ -27,7 +26,7 @@ try{
 					return res.status(401).json({ mensaje: 'Credenciales inválidas' });
 			}
 		
-				const token = jwt.sign({ userId: usuario.id }, 'clave_secreta', { expiresIn: '1h' });
+				const token = jwt.sign({ usern: usuario.username }, 'clave_secreta', { expiresIn: '1h' });
 
 				session.loggedin = true;
 				session.username = username;

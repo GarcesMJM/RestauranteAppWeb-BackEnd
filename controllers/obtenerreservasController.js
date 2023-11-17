@@ -1,12 +1,11 @@
 const db = require('../database/databaseconfig')
 
 async function obtenerReservas(req, res){
-    const {username}=req.body;
-    console.log(username)
+    try {
+        const {username}=req.body;
 
-    if(username){
+    if(username && username !='admin'){
         db.query('SELECT * FROM bookings WHERE name = ?', [username], async (error, results) => {
-        console.log('hola')
             if (error) throw error;
 
             if (results.length > 0) {
@@ -14,6 +13,21 @@ async function obtenerReservas(req, res){
             }
         });
     }
+    if(username && username == 'admin'){
+        db.query('SELECT * FROM bookings WHERE name <> ?  ',[username], async (error, results) => {
+            if (error) throw error;
+
+            if (results.length > 0) {
+                res.send(results);         
+            }
+        });
+    }
+        
+    } catch (error) {
+        res.send(error);
+        console.log(error);
+    }
+    
 
 
 }

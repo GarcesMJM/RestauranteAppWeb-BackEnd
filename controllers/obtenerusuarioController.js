@@ -13,14 +13,14 @@ async function obtenerUsuario(req , res){
               return res.send({ message: 'Invalid token' });
             }
             
-            id = decoded.userId;
-            db.query('SELECT * FROM users WHERE id = ?', [id], async (error, results) => {
+            username = decoded.usern;
+            db.query('SELECT * FROM users WHERE username = ?', [username], async (error, results) => {
 
                 if (error) throw error;
 
                 if (results.length > 0) {
                 let usuario = {
-                  id: results[0].id,
+
                   username: results[0].username,
                   hashedPassword: results[0].hash, 
                 };
@@ -35,4 +35,24 @@ async function obtenerUsuario(req , res){
 
 }
 
-module.exports=obtenerUsuario;
+async function obtenerUsuarios(req, res){
+  try {
+    const {username} = req.body;
+    console.log('hola')
+
+        db.query('SELECT * FROM users WHERE username <> ?', [username], async (error, results) => {
+
+            if (error) throw error;
+
+            if (results.length > 0) {
+            res.send(results);
+            }
+        });
+    
+} catch (error) {
+    
+}
+
+}
+
+module.exports={obtenerUsuario, obtenerUsuarios};
